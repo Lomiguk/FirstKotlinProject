@@ -1,4 +1,4 @@
-package com.lomiguk.usersflowers.data.request
+package com.lomiguk.usersflowers.data.request.user
 
 import jakarta.validation.constraints.Size
 import org.jetbrains.annotations.NotNull

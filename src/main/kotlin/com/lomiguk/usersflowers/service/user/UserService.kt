@@ -1,11 +1,13 @@
-package com.lomiguk.usersflowers.user
+package com.lomiguk.usersflowers.service.user
 
 import com.lomiguk.usersflowers.data.dto.UserDTO
-import com.lomiguk.usersflowers.data.request.UserAddRequest
-import com.lomiguk.usersflowers.user.CouldNotFoundCreatedUserException
-import com.lomiguk.usersflowers.user.UserAddPasswordNotMatchException
-import com.lomiguk.usersflowers.user.UserRepository
+import com.lomiguk.usersflowers.data.request.user.UserAddRequest
+import com.lomiguk.usersflowers.exception.user.CouldNotFoundCreatedUserException
+import com.lomiguk.usersflowers.exception.user.UserAddPasswordNotMatchException
 import com.lomiguk.flowerCollection.util.getHash
+import com.lomiguk.usersflowers.data.request.user.UserDelRequest
+import com.lomiguk.usersflowers.exception.user.DeletedUserUndeleted
+import com.lomiguk.usersflowers.repository.DAO.user.UserRepository
 import org.springframework.stereotype.Service
 
 @Service
@@ -20,7 +22,17 @@ class UserService(private val userRepo: UserRepository) {
         return UserDTO(createdUser)
     }
 
-    fun delete(id: String): UserDTO {
-        TODO("Not yet implemented")
+    fun delete(userDelRequest: UserDelRequest) {
+        if (userDelRequest.password != userDelRequest.passwordRepeat)
+            throw UserAddPasswordNotMatchException("Password don't match")
+        userRepo.delete(userDelRequest.login)
+        // --
+        if (userRepo.getUser(userDelRequest.login) != null)
+            throw DeletedUserUndeleted("Failed to delete a user")
+    }
+
+    fun getOneById(id: Long): UserDTO? {
+        val user = userRepo.getUserById(id) ?: return null
+        return UserDTO(user)
     }
 }

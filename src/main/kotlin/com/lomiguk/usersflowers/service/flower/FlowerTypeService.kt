@@ -1,4 +1,4 @@
-package com.lomiguk.usersflowers.user
+package com.lomiguk.usersflowers.service.flower
 
 import org.springframework.stereotype.Service
 
