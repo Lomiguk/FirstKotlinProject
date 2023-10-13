@@ -24,6 +24,14 @@ class UserController (val userService: UserService) {
     }
     @GetMapping("/{id}")
     fun getOneById(@PathVariable("id") id: Long):ResponseEntity<UserDTO>{
-        return ResponseEntity(userService.getOneById(id), HttpStatus.FOUND)
+        return ResponseEntity(userService.getOneById(id), HttpStatus.OK)
+    }
+    @GetMapping("/{login}")
+    fun getOneByLogin(@PathVariable("login") login: String):ResponseEntity<UserDTO>{
+        return ResponseEntity(userService.getOneByLogin(login), HttpStatus.OK)
+    }
+    @GetMapping("/")
+    fun getPack(@RequestParam limit: Int, @RequestParam offset: Int):ResponseEntity<Collection<UserDTO>>{
+        return ResponseEntity(userService.getPack(limit, offset), HttpStatus.OK)
     }
 }
