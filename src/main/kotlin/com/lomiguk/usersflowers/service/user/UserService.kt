@@ -4,7 +4,7 @@ import com.lomiguk.flowerCollection.util.getHash
 import com.lomiguk.usersflowers.data.dto.UserDTO
 import com.lomiguk.usersflowers.data.request.user.UserAddRequest
 import com.lomiguk.usersflowers.data.request.user.UserDelRequest
-import com.lomiguk.usersflowers.entity.User
+import com.lomiguk.usersflowers.data.entity.User
 import com.lomiguk.usersflowers.exception.user.CouldNotFoundCreatedUserException
 import com.lomiguk.usersflowers.exception.user.DeletedUserUndeleted
 import com.lomiguk.usersflowers.exception.user.UserAddPasswordNotMatchException

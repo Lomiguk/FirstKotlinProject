@@ -1,6 +1,6 @@
 package com.lomiguk.usersflowers.RowMapper
 
-import com.lomiguk.usersflowers.entity.User
+import com.lomiguk.usersflowers.data.entity.User
 import org.springframework.jdbc.core.RowMapper
 import java.sql.ResultSet
 

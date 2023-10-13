@@ -1,6 +1,6 @@
 package com.lomiguk.usersflowers.repository.DAO.user
 
-import com.lomiguk.usersflowers.entity.User
+import com.lomiguk.usersflowers.data.entity.User
 import com.lomiguk.usersflowers.RowMapper.UserRowMapper
 import com.lomiguk.usersflowers.data.dto.UserDTO
 import org.springframework.jdbc.core.JdbcTemplate
