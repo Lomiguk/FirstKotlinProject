@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.lang.Boolean.TRUE
-import kotlin.Any
 
 @RestController
 @RequestMapping("/user")
@@ -22,8 +21,20 @@ class UserController (val userService: UserService) {
         userService.delete(userDelRequest)
         return ResponseEntity.ok().body(TRUE)
     }
-    @GetMapping("/{id}")
+    @GetMapping("/getting/id/{id}")
     fun getOneById(@PathVariable("id") id: Long):ResponseEntity<UserDTO>{
-        return ResponseEntity(userService.getOneById(id), HttpStatus.FOUND)
+        val userDTO = userService.getOneById(id)
+            ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+        return ResponseEntity(userDTO, HttpStatus.OK)
+    }
+    @GetMapping("/getting/login/{login}")
+    fun getOneByLogin(@PathVariable("login") login: String):ResponseEntity<UserDTO>{
+        val userDTO = userService.getOneByLogin(login)
+            ?: return ResponseEntity(HttpStatus.NOT_FOUND)
+        return ResponseEntity(userDTO, HttpStatus.OK)
+    }
+    @GetMapping("/")
+    fun getPack(@RequestParam limit: Int, @RequestParam offset: Int):ResponseEntity<Collection<UserDTO>>{
+        return ResponseEntity(userService.getPack(limit, offset), HttpStatus.OK)
     }
 }
