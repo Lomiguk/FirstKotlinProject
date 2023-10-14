@@ -1,10 +1,9 @@
 package com.lomiguk.usersflowers.repository.DAO.user
 
 import com.lomiguk.usersflowers.data.entity.User
-import com.lomiguk.usersflowers.RowMapper.UserRowMapper
-import com.lomiguk.usersflowers.data.dto.UserDTO
+import com.lomiguk.usersflowers.repository.rowMapper.UserRowMapper
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.jdbc.core.queryForObject
 import org.springframework.stereotype.Repository
 
 const val USER_ADD_QUERY = "INSERT INTO user_table (login, password) VALUES (?, ?);"
@@ -19,7 +18,12 @@ class UserRepository(private val jdbcTemplate: JdbcTemplate) {
     }
 
     fun getUser(login: String): User? {
-        return jdbcTemplate.queryForObject(GET_USER_QUERY, UserRowMapper(), login)
+        return try{
+            jdbcTemplate.queryForObject(GET_USER_QUERY, UserRowMapper(), login)
+        }
+        catch (e: EmptyResultDataAccessException){
+            null
+        }
     }
 
     fun delete(login: String){
@@ -27,11 +31,21 @@ class UserRepository(private val jdbcTemplate: JdbcTemplate) {
     }
 
     fun getUserById(id: Long): User? {
-        return jdbcTemplate.queryForObject(GET_USER_ID_QUERY, UserRowMapper(), id)
+        return try {
+            jdbcTemplate.queryForObject(GET_USER_ID_QUERY, UserRowMapper(), id)
+        }
+        catch (e: EmptyResultDataAccessException){
+            null
+        }
     }
 
     fun getUserByLogin(login: String): User? {
-        return jdbcTemplate.queryForObject(GET_USER_QUERY, UserRowMapper(), login)
+        return try {
+            jdbcTemplate.queryForObject(GET_USER_QUERY, UserRowMapper(), login)
+        }
+        catch (e: EmptyResultDataAccessException){
+            null
+        }
     }
 
     fun getUsers(limit: Int, offset: Int): Collection<User> {

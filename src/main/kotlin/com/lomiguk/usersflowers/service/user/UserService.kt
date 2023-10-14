@@ -2,9 +2,9 @@ package com.lomiguk.usersflowers.service.user
 
 import com.lomiguk.flowerCollection.util.getHash
 import com.lomiguk.usersflowers.data.dto.UserDTO
+import com.lomiguk.usersflowers.data.entity.User
 import com.lomiguk.usersflowers.data.request.user.UserAddRequest
 import com.lomiguk.usersflowers.data.request.user.UserDelRequest
-import com.lomiguk.usersflowers.data.entity.User
 import com.lomiguk.usersflowers.exception.user.CouldNotFoundCreatedUserException
 import com.lomiguk.usersflowers.exception.user.DeletedUserUndeleted
 import com.lomiguk.usersflowers.exception.user.UserAddPasswordNotMatchException
@@ -48,7 +48,7 @@ class UserService(private val userRepo: UserRepository) {
 
     private fun transformCollectionUserEntityToDTO(users: Collection<User>): Collection<UserDTO> {
         val usersList = arrayListOf<UserDTO>()
-        for(user: User in users){
+        for(user in users){
             usersList.add(UserDTO(user))
         }
         return usersList
