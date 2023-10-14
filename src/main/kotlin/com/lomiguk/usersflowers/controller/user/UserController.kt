@@ -9,6 +9,9 @@ import com.lomiguk.usersflowers.data.request.user.UserAddRequest
 import com.lomiguk.usersflowers.data.request.user.UserDelRequest
 import com.lomiguk.usersflowers.exception.CouldNotFoundCreatedUserFlowersException
 import com.lomiguk.usersflowers.exception.CouldNotFoundPartOfStagingTableException
+import com.lomiguk.usersflowers.exception.user.CouldNotFoundCreatedUserException
+import com.lomiguk.usersflowers.exception.user.DeletedUserUndeleted
+import com.lomiguk.usersflowers.exception.user.UserAddPasswordNotMatchException
 import com.lomiguk.usersflowers.service.UserFlowersService
 import com.lomiguk.usersflowers.service.user.UserService
 import org.slf4j.Logger
@@ -25,11 +28,30 @@ class UserController (val userService: UserService,
     val logger: Logger? = LoggerFactory.getLogger(UserController::class.java.name)
     @PostMapping(value = ["/",""])
     fun add(@RequestBody userAddRequest: UserAddRequest): ResponseEntity<UserDTO>{
-        return ResponseEntity(userService.add(userAddRequest), HttpStatus.CREATED)
+        return try {
+            ResponseEntity(userService.add(userAddRequest), HttpStatus.CREATED)
+        }catch (e: UserAddPasswordNotMatchException){
+            logger?.warn(e.message)
+            ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+        catch (e: CouldNotFoundCreatedUserException){
+            logger?.error(e.message)
+            ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
     }
     @DeleteMapping("/")
     fun delete(@RequestBody userDelRequest: UserDelRequest) : ResponseEntity<Any> {
-        userService.delete(userDelRequest)
+        try {
+            userService.delete(userDelRequest)
+        }
+        catch (e: UserAddPasswordNotMatchException){
+            logger?.warn(e.message)
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
+        catch (e: DeletedUserUndeleted){
+            logger?.error(e.message)
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
+        }
         return ResponseEntity.ok().body(TRUE)
     }
     @GetMapping("/getting/id/{id}")
