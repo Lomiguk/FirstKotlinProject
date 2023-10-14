@@ -1,6 +1,6 @@
 package com.lomiguk.usersflowers.service.user
 
-import com.lomiguk.flowerCollection.util.getHash
+import com.lomiguk.usersflowers.util.getHash
 import com.lomiguk.usersflowers.data.dto.UserDTO
 import com.lomiguk.usersflowers.data.entity.User
 import com.lomiguk.usersflowers.data.request.user.UserAddRequest
@@ -10,19 +10,22 @@ import com.lomiguk.usersflowers.exception.user.DeletedUserUndeleted
 import com.lomiguk.usersflowers.exception.user.UserAddPasswordNotMatchException
 import com.lomiguk.usersflowers.repository.DAO.user.UserRepository
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class UserService(private val userRepo: UserRepository) {
+    @Transactional
     fun add(userAddRequest: UserAddRequest): UserDTO {
         if (userAddRequest.password != userAddRequest.passwordRepeat)
             throw UserAddPasswordNotMatchException("Password don't match")
         userRepo.add(userAddRequest.login, getHash(userAddRequest.password))
         // --
         val createdUser = userRepo.getUser(userAddRequest.login)
-            ?: throw CouldNotFoundCreatedUserException("Couldn't found created profile!")
+            ?: throw CouldNotFoundCreatedUserException("Couldn't found created user!")
         return UserDTO(createdUser)
     }
 
+    @Transactional
     fun delete(userDelRequest: UserDelRequest) {
         if (userDelRequest.password != userDelRequest.passwordRepeat)
             throw UserAddPasswordNotMatchException("Password don't match")

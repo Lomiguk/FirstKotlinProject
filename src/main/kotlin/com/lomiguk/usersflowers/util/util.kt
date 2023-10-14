@@ -1,4 +1,4 @@
-package com.lomiguk.flowerCollection.util
+package com.lomiguk.usersflowers.util
 
 import com.google.common.hash.Hashing
 import java.nio.charset.StandardCharsets
